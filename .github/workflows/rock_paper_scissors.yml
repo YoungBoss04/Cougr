@@ -1,0 +1,26 @@
+name: Rock Paper Scissors
+
+on:
+  pull_request:
+    paths:
+      - 'examples/rock_paper_scissors/**'
+      - '!examples/rock_paper_scissors/**/*.md'
+      - '.github/workflows/rock_paper_scissors.yml'
+      - '.github/workflows/example_reusable.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'examples/rock_paper_scissors/**'
+      - '!examples/rock_paper_scissors/**/*.md'
+      - '.github/workflows/rock_paper_scissors.yml'
+      - '.github/workflows/example_reusable.yml'
+
+concurrency:
+  group: $current_ref_-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    uses: ./.github/workflows/example_reusable.yml
+    with:
+      example: rock_paper_scissors

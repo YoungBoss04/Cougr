@@ -43,3 +43,14 @@ jobs:
             echo "::error::Unresolved merge conflict markers found."
             exit 1
           fi
+
+      - name: Check example workflow coverage
+        run: |
+          for dir in examples/*/; do
+            name=$(basename "$dir")
+            [ -f "$dir/Cargo.toml" ] || continue
+            if ! grep -rq "examples/$name/" .github/workflows/*.yml; then
+              echo "::error::Example '$name' has no CI workflow referencing examples/$name/"
+              exit 1
+            fi
+          done
